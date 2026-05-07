@@ -13,7 +13,7 @@ export class InstitutesService {
     @InjectRepository(Institute)
     private instituteRepository: Repository<Institute>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(createInstituteDto: CreateInstituteDto): Promise<any> {
     const { name, email, subdomain } = createInstituteDto;
@@ -35,6 +35,7 @@ export class InstitutesService {
 
     return {
       message: 'Registration successful',
+      id: savedInstitute.id,
     };
   }
 
@@ -43,7 +44,7 @@ export class InstitutesService {
 
     // Find institute by email
     const institute = await this.instituteRepository.findOne({ where: { email } });
-    
+
     if (!institute) {
       throw new UnauthorizedException('Invalid credentials');
     }
