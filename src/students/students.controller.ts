@@ -7,6 +7,12 @@ import { Student } from './student.entity';
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
+  @Post('register')
+  async registerPublicStudent(@Body() body: any) {
+    const { institute_id, ...studentData } = body;
+    return this.studentsService.createStudent(institute_id, studentData);
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   async createStudent(
