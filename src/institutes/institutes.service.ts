@@ -53,6 +53,9 @@ export class InstitutesService {
     const payload = { email: institute.email, sub: institute.id };
     const access_token = this.jwtService.sign(payload);
 
-    return { access_token };
+    return {
+      access_token,
+      collegeName: institute.name,
+    };
   }
 }

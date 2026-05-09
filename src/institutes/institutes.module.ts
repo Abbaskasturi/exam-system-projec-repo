@@ -20,6 +20,6 @@ import { Institute } from './institute.entity';
   ],
   controllers: [InstitutesController],
   providers: [InstitutesService],
-  exports: [InstitutesService],
+  exports: [InstitutesService, JwtModule],
 })
 export class InstitutesModule { }

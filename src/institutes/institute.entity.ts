@@ -11,7 +11,7 @@ export class Institute {
   @Column({ length: 250, unique: true })
   email: string;
 
-  @PrimaryColumn({ type: 'varchar', length: 250 })
+  @Column({ type: 'varchar', length: 250 })
   subdomain: string;
 
   @Column({ default: true })
