@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, UseInterceptors, UploadedFile, Req, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Get, Param, UseGuards, UseInterceptors, UploadedFile, Req, Body, BadRequestException, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { QuestionsService } from './questions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -48,8 +48,24 @@ export class QuestionsController {
     // req.user is set by the JwtAuthGuard
     // The sub property contains the institute ID
     const instituteId = req.user.sub;
-    const imageUrl = file.path;
+    // Normalize path to use forward slashes for URL consistency
+    const imageUrl = file.path.replace(/\\/g, '/');
 
     return this.questionsService.createQuestion(instituteId, imageUrl, difficultyLevel);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getQuestions(
+    @Req() req: any,
+    @Query('difficulty_level') difficultyLevel?: string
+  ) {
+    const instituteId = req.user.sub;
+    return this.questionsService.getQuestionsByInstitute(instituteId, difficultyLevel);
+  }
+
+  @Get(':id')
+  async getQuestion(@Param('id') id: string) {
+    return this.questionsService.getQuestionById(Number(id));
   }
 }

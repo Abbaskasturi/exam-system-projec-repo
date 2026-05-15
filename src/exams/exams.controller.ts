@@ -19,9 +19,40 @@ export class ExamsController {
     return this.examsService.createExam(instituteId, examData);
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getExams(@Req() req: any) {
+    const instituteId = req.user.sub;
+    return this.examsService.getExamsByInstitute(instituteId);
+  }
+
   @Get(':link')
   async getExam(@Param('link') link: string) {
     return this.examsService.getExamByLink(link);
+  }
+
+  @Post(':id/keys')
+  @UseGuards(JwtAuthGuard)
+  async saveKeys(
+    @Param('id') examId: string,
+    @Body('keys') keys: any[]
+  ) {
+    return this.examsService.saveAnswerKeys(Number(examId), keys);
+  }
+
+  @Get(':id/keys')
+  @UseGuards(JwtAuthGuard)
+  async getKeys(@Param('id') examId: string) {
+    return this.examsService.getAnswerKeys(Number(examId));
+  }
+
+  @Post(':id/key-paper')
+  @UseGuards(JwtAuthGuard)
+  async saveKeyPaper(
+    @Param('id') examId: string,
+    @Body('keys') keys: { question_number: number, correct_option: string }[]
+  ) {
+    return this.examsService.createKeyPaper(Number(examId), keys);
   }
 }
 

@@ -18,4 +18,19 @@ export class QuestionsService {
     });
     return this.questionsRepository.save(question);
   }
+
+  async getQuestionById(id: number): Promise<Question | null> {
+    return this.questionsRepository.findOne({ where: { id } });
+  }
+
+  async getQuestionsByInstitute(instituteId: number, difficultyLevel?: string): Promise<Question[]> {
+    const where: any = { institute_id: instituteId };
+    if (difficultyLevel) {
+      where.difficulty_level = difficultyLevel;
+    }
+    return this.questionsRepository.find({
+      where,
+      order: { created_at: 'DESC' },
+    });
+  }
 }
